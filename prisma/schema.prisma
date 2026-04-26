@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id              String        @id @default(cuid())
+  domain          String        @unique
+  businessName    String?
+  businessSummary String?
+  idealCustomer   String?
+  productsList    String?
+  advantages      String?
+  sitemapUrl      String?
+  pagesCount      Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  contentItems    ContentItem[]
+  connections     Connection[]
+  agentRuns       AgentRun[]
+}
+
+model Connection {
+  id        String   @id @default(cuid())
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  kind      String
+  category  String
+  status    String   @default("not_connected")
+  config    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([siteId, kind])
+}
+
+model ContentItem {
+  id         String   @id @default(cuid())
+  siteId     String
+  site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  pageType   String
+  keyword    String
+  title      String
+  status     String   @default("planned")
+  body       String?
+  metaTitle  String?
+  metaDescription String?
+  seoScore   Int?
+  customTags String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AgentRun {
+  id        String   @id @default(cuid())
+  siteId    String?
+  site      Site?    @relation(fields: [siteId], references: [id], onDelete: SetNull)
+  kind      String
+  status    String   @default("running")
+  input     String?
+  output    String?
+  error     String?
+  tokensIn  Int?
+  tokensOut Int?
+  cacheRead Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

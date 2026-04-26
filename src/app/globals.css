@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FAF8F4;
+  --surface: #FFFFFF;
+  --border: #E8E3D8;
+  --ink: #0F1115;
+  --muted: #6B6F78;
+  --accent: #E0531F;
+  --accent-soft: #FBE8DD;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #D6D1C4; border-radius: 8px; }
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse-soft { animation: pulse-soft 1.6s ease-in-out infinite; }
